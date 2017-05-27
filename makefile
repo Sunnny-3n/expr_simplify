@@ -1,6 +1,6 @@
 cc = clang
 prom = calc
-cflag = -Wall -g -O3
+cflag = -Wall -g
 deps = $(shell find ./ -name "*.h")
 src = $(shell find ./ -name "*.c")
 obj = $(src:%.c=%.o)
