@@ -1,5 +1,5 @@
 #include "pretreatment.h"
-#include "define.h"
+
 
 static int
 get_size(const char s[])
@@ -13,9 +13,9 @@ get_size(const char s[])
 	{
 		if(s[i] == ' ')
 			--output;
-		else if( (s[i] == '(') && (isdigit(s[i-1]) || isunknow(s[i-1]) || (s[i-1] == ')')))
+		else if( (s[i] == '(') && (isnum(s[i-1]) || isunknow(s[i-1]) || (s[i-1] == ')')))
 			++output;
-		else if( (isunknow(s[i])) && (isdigit(s[i-1]) || isunknow(s[i-1])))
+		else if( (isunknow(s[i])) && (isnum(s[i-1]) || isunknow(s[i-1])))
 			++output;
 	}
 	return output + i + 1;
@@ -24,26 +24,30 @@ get_size(const char s[])
 char *
 pretreatment(const char s[])
 {
-	assert(s[0] != '0');
+	assert(s[0] != '\0');
 	char * expr = malloc(sizeof(char)*get_size(s));
 	assert(expr != NULL);
 
-	expr[get_size(s)] = '0';
+	expr[get_size(s)] = '\0';
 
-	expr[0] = s[0];
+	int j = 1,i = 1;
 
-	int j = 1;
-	for(int i = 1;s[i] != '\0';i++)
+	if(s[0] == ' ')
+		i--,j--;
+	else
+		expr[0] = s[0];
+
+	for(;s[i] != '\0';i++)
 	{
 		if(s[i] == ' ')
 			;
-		else if( (s[i] == '(') && (isdigit(s[i-1]) || isunknow(s[i-1]) || (s[i-1] == ')')))
+		else if( (s[i] == '(') && (isnum(s[i-1]) || isunknow(s[i-1]) || (s[i-1] == ')')))
 		{
 			expr[j] = '*';
 			expr[j+1] = s[i];
 			j+=2;
 		}
-		else if( (isunknow(s[i])) && (isdigit(s[i-1]) || isunknow(s[i-1])))
+		else if( (isunknow(s[i])) && (isnum(s[i-1]) || isunknow(s[i-1])))
 		{
 			expr[j] = '*';
 			expr[j+1] = s[i];
