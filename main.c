@@ -20,7 +20,7 @@ void print_infix(struct expr * p)
 int
 main(void)
 {
-	char s[] = "(2+x)(x+1)(y-2)(p+33)";
+	char s[] = "(x+1)/(x-1)*(x-1)";
 	char * p = pretreatment(s);
 	printf("%s\n",p);
 
