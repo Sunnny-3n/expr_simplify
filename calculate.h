@@ -15,8 +15,8 @@ struct monomial
 	}coefficient;
 
 	struct monomial * next;
-
 	struct unknow alpha[];
+
 }monomial;
 
 struct algebraic_expr
