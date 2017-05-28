@@ -14,9 +14,9 @@ struct monomial
 		double denominator;
 	}coefficient;
 
-	struct unknow * alpha;
-
 	struct monomial * next;
+
+	struct unknow alpha[];
 }monomial;
 
 struct algebraic_expr
