@@ -1,8 +1,9 @@
+#ifndef DEFINE_H_
+#define DEFINE_H_
+
 #include <stdbool.h>
 #include <ctype.h>
 
-#ifndef DEFINE_H_
-#define DEFINE_H_
 
 bool
 isnum(char c);
