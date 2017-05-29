@@ -3,8 +3,14 @@
 struct expr *
 s_to_infix(const char s[]);
 
+int
+get_expr_size(const char s[]);
+
+int
+get_infix_size(const struct expr * const infix);
+
 struct expr *
-infix_to_RPN(const struct expr infix[]);
+infix_to_RPN(const struct expr * const infix);
 
 enum combination
 combine(char c);
@@ -22,18 +28,12 @@ get_stack_size(const struct expr infix[]);
 struct expr *
 s_to_infix(const char s[])
 {
-	struct expr * infix = malloc(sizeof(struct expr)*MAX);
+	struct expr * infix = malloc(get_expr_size(s)*sizeof(struct expr));
 
 	static char * p_end;
 	int j = 0;
-	for(int i = 0,k = MAX-1;s[i] != '\0';k--)
+	for(int i = 0;s[i] != '\0';)
 	{
-		if(k == 0)
-		{
-			infix = realloc(infix,sizeof(infix)+sizeof(struct expr)*MAX);
-			assert(infix != NULL);
-		}
-
 		if(isnum(s[i]))
 		{
 			infix[j].num = strtod(&s[i],&p_end);
@@ -66,9 +66,9 @@ s_to_infix(const char s[])
 }
 
 struct expr *
-infix_to_RPN(const struct expr * infix)
+infix_to_RPN(const struct expr * const infix)
 {
-	struct expr * RPN = (struct expr *)malloc(sizeof(infix));
+	struct expr * RPN = malloc(get_infix_size(infix)*sizeof(struct expr));
 	assert(RPN != NULL);
 
 	char symbol_stack[get_stack_size(infix)],
@@ -127,7 +127,6 @@ infix_to_RPN(const struct expr * infix)
 					}
 			}
 		}
-
 	}
 	j = pop_all(j,RPN,*top,symbol_stack);
 	RPN[j].type = end;
@@ -184,6 +183,27 @@ pop_all(int j,struct expr * RPN,int top,char * stack)
 }
 
 int
+get_expr_size(const char s[])
+{
+	int size = 0;
+	bool flag = false; // 记录前一个字符是否是数字
+	for(int i = 0;s[i] != '\0';i++)
+	{
+		if(isnum(s[i]))
+		{
+			if(flag == false)
+				flag = true,size++;
+			else
+				; //not to do something
+		}
+		else if(isunknow(s[i]) || issymbol(s[i]))
+			flag = false,size++;
+	}
+
+	return size;
+}
+
+int
 get_stack_size(const struct expr infix[])
 {
 	int output = STACK_SIZE;
@@ -193,4 +213,13 @@ get_stack_size(const struct expr infix[])
 			output++;
 	}
 	return output;
+}
+
+int
+get_infix_size(const struct expr * const infix)
+{
+	int i = 0;
+	for(;infix[i].type != end;i++)
+		;
+	return i;
 }

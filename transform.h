@@ -8,9 +8,6 @@
 #include <stdio.h>
 #include "define.h"
 
-
-#define MAX 50
-
 /*
 *优先级为从左到右的符号有 + - * /
 *因为桟中 top 符号的优先级必须比加入的符号的优先级大,否则将被弹出(两者都为从左到右)
@@ -39,6 +36,6 @@ struct expr *
 s_to_infix(const char s[]);
 
 struct expr *
-infix_to_RPN(const struct expr[]);
+infix_to_RPN(const struct expr * const infix);
 
 #endif
