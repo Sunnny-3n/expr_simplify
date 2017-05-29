@@ -68,7 +68,7 @@ s_to_infix(const char s[])
 struct expr *
 infix_to_RPN(const struct expr * infix)
 {
-	struct expr * RPN = malloc(sizeof(infix));
+	struct expr * RPN = (struct expr *)malloc(sizeof(infix));
 	assert(RPN != NULL);
 
 	char symbol_stack[get_stack_size(infix)],

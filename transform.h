@@ -1,3 +1,6 @@
+#ifndef TRANSFORM_H_
+#define TRANSFORM_H_
+
 #include <stdlib.h>
 #include <assert.h>
 #include <stdbool.h>
@@ -5,8 +8,6 @@
 #include <stdio.h>
 #include "define.h"
 
-#ifndef TRANSFORM_H_
-#define TRANSFORM_H_
 
 #define MAX 50
 
@@ -32,7 +33,7 @@ struct expr
 		char unknow;
 		char symbol;
 	};
-}expr;
+};
 
 struct expr *
 s_to_infix(const char s[]);
