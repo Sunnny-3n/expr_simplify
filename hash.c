@@ -74,18 +74,6 @@ search(const struct hash_key * table,size_t size,uint64_t hash_sum)
 }
 
 struct hash_key *
-find_hash(const struct hash_key * table,size_t size,const char * const key,size_t len)
-{
-    uint64_t hash_sum = hash(key,len);
-    table = search(table,size,hash_sum);
-
-    if(table->hash != hash_sum)
-        return NULL;
-
-    return (struct hash_key *)table;
-}
-
-struct hash_key *
 find_from_hash(const struct hash_key * table,size_t size,uint64_t hash_sum)
 {
     table = search(table,size,hash_sum);
@@ -95,6 +83,16 @@ find_from_hash(const struct hash_key * table,size_t size,uint64_t hash_sum)
 
     return (struct hash_key *)table;
 }
+
+
+struct hash_key *
+find_hash(const struct hash_key * table,size_t size,const char * const key,size_t len)
+{
+    uint64_t hash_sum = hash(key,len);
+    return find_from_hash(table,size,hash_sum);
+}
+
+
 
 void
 insert_hash(const struct hash_key * const table,size_t size,size_t * const max_len,const char * const key)
