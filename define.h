@@ -12,11 +12,15 @@
 #define is_symbol(token)        (token.type == symbol)
 #define is_num(token)     (token.type == num)
 
-enum operators {add,sub,mul,div_r/*div 与 stdlib.h 中的 div 重名*/,
+enum operators {add,sub,mul,div_r,//div 与 stdlib.h 中的 div 重名
                 pow,left_bracket,right_bracket};
+enum combine   {left,right};  //符号的结合性 e.g. + left
+                              //                ^ right               
+                              
+enum level {lv1,lv2,lv3,lv4}; // 等级越高代表符号的优先级越高
 
-static char * symbol_tab[]   = {"a","b","c","d","x","y","z","\0"};
-static char * operator_tab[] = {"+","-","*","/","(",")","[","]","{","}","\0"};
+const static char * symbol_tab[]   = {"a","b","c","d","x","y","z","\0"};
+const static char * operator_tab[] = {"+","-","*","/","(",")","[","]","{","}","\0"};
 
 
 struct token
@@ -41,6 +45,12 @@ s_to_operator(const char * const s);
 
 char *
 operator_to_s(enum operators operator);
+
+enum combine
+combine(enum operators op);
+
+enum level
+priority(enum operators op);
 
 struct hash_key *
 operators(size_t * const max_len,size_t * const size);

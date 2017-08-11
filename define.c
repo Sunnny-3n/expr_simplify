@@ -21,6 +21,40 @@ isnum(char c)
     return isdigit(c);
 }
 
+enum combine
+combine(enum operators op)
+{
+    switch(op){
+        case add:
+        case sub:
+        case mul:
+        case div_r:
+            return left;
+            break;
+        case pow:
+            return right;
+            break;
+        default:
+            ERR(err_combine,op);
+    }
+}
+
+enum level
+priority(enum operators op)
+{
+    switch(op){
+        case add:
+        case sub:
+            return lv1;
+        case mul:
+        case div_r:
+            return lv2;
+        case pow:
+            return lv3;
+        default:
+            ERR(err_priority,op);
+    }
+}
 
 enum operators 
 s_to_operator(const char * const s)
