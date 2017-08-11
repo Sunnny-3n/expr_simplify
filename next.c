@@ -26,7 +26,7 @@ set_num(struct token * const token, const char * const s)
 }
 
 static bool 
-isoperator(const struct hash_table_head * const head,const char * const key) 
+isoperator(const struct hash_head * const head,const char * const key) 
 {
 	return max_match(head->operators, head->operators_len, head->max_operator_len,
 					 key);
@@ -34,7 +34,7 @@ isoperator(const struct hash_table_head * const head,const char * const key)
 
 static int 
 set_operator(struct token * const token, const char * const s,
-			 const struct hash_table_head * const head) 
+			 const struct hash_head * const head) 
 {
 	struct hash_key * hash_key = max_match(head->operators, head->operators_len,
 										   head->max_operator_len, s);
@@ -44,7 +44,7 @@ set_operator(struct token * const token, const char * const s,
 }
 
 static bool 
-issymbol(const struct hash_table_head *const head,
+issymbol(const struct hash_head *const head,
 					 const char *const key) 
 {
 	return max_match(head->symbols, head->symbols_len, head->max_symbol_len, key);
@@ -52,7 +52,7 @@ issymbol(const struct hash_table_head *const head,
 
 static int 
 set_symbol(struct token * const token, const char * const s,
-		   const struct hash_table_head * const head) 
+		   const struct hash_head * const head) 
 {
 	struct hash_key * hash_key =
 		max_match(head->symbols, head->symbols_len, head->max_symbol_len, s);
@@ -93,7 +93,7 @@ rule_add_mul(struct stack_head * head, struct token before,struct token now)
 }
 
 struct token *
-next(const char s[],const struct hash_table_head * const head,
+next(const char s[],const struct hash_head * const head,
 	 struct stack_head * const stack_head) 
 {
 	static int src = 0;

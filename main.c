@@ -7,17 +7,17 @@
 
 #define MAX 2000
 
-static struct hash_table_head *
+static struct hash_head *
 init_hash_head(void)
 {
-    struct hash_table_head * head = Malloc(sizeof(struct hash_table_head));
+    struct hash_head * head = Malloc(sizeof(struct hash_head));
     head->symbols = symbols(&(head->max_symbol_len),&(head->symbols_len));
     head->operators = operators(&(head->max_operator_len),&(head->operators_len));
     return head;
 }
 
 static void
-print_token(const struct hash_table_head * head,const struct token * const token)
+print_token(const struct hash_head * head,const struct token * const token)
 {
     switch(token->type){
         case num:
@@ -34,7 +34,7 @@ print_token(const struct hash_table_head * head,const struct token * const token
 
 int main(void)
 {
-    struct hash_table_head * head = init_hash_head();
+    struct hash_head * head = init_hash_head();
     struct stack_head  * stack_head = init_stack_head();
     struct token * token;
 

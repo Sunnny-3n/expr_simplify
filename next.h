@@ -9,7 +9,7 @@
 
 
 struct token *
-next(const char s[],const struct hash_table_head * const head,
+next(const char s[],const struct hash_head * const head,
 	 struct stack_head * const stack_head);
 
 #endif

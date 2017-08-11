@@ -15,7 +15,7 @@ struct hash_key
     struct hash_key * next;
 };
 
-struct hash_table_head
+struct hash_head
 {
     size_t symbols_len,operators_len;
     size_t max_symbol_len,max_operator_len;

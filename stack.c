@@ -1,4 +1,5 @@
 #include "stack.h"
+#include "next.c"
 
 bool
 is_empty_stack(const struct stack_head * const head)
