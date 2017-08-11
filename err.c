@@ -19,6 +19,12 @@ print_err_msg(enum err_msg msg,...)
     case err_bracket:
         fprintf(stderr,"括号匹配不全 ");
         break;
+    case err_combine:
+        fprintf(stderr,"未定义运算符 %s 的结合性 ",operator_to_s(va_arg(args,int)));
+        break;
+    case err_priority:
+        fprintf(stderr,"未定义运算符 %s 的优先级 ",operator_to_s(va_arg(args,int)));
+        break;
     case err_operator:
         fprintf(stderr,"%s 运算符使用不当 ",va_arg(args,char *));
         break;
@@ -35,5 +41,6 @@ Malloc(size_t size)
     void * new = malloc(size);
     if(new == NULL)
         ERR(not_enough_mem);
+    bzero(new,size);
     return new;
 }

@@ -10,7 +10,8 @@
  
 
 enum err_msg{not_enough_mem,err_operator_or_symbol,
-             err_operator,err_bracket,err_pop};
+             err_operator,err_bracket,err_combine,
+             err_priority,err_pop};
 
 void
 print_err_msg(enum err_msg msg,...);
