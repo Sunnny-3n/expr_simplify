@@ -86,8 +86,8 @@ rule_add_mul(struct stack_head * head, struct token before,struct token now)
 		struct token fill;
 		fill.type     = operator;
 		fill.operator = mul;
-		push(head,now);
-		push(head,fill);
+		push(head,&now);
+		push(head,&fill);
 		return true;
 	}
 }
@@ -100,11 +100,8 @@ next(const char s[],const struct hash_head * const head,
 	static struct token before,now;
 
 	pop_all:
-	for(int i = stack_head->node_count;i > 0;i--){  
-		static struct token tmp;   
-		tmp = pop(stack_head);     
-		return &tmp;               
-	}
+	for(int i = stack_head->node_count;i > 0;i--)  
+		return (struct token *)pop(stack_head);     
 
 	#define SETS(func){                                       \
 		before = now;                                         \
