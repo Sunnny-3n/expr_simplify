@@ -1,5 +1,4 @@
 #include "stack.h"
-#include "next.c"
 
 bool
 is_empty_stack(const struct stack_head * const head)
@@ -95,7 +94,7 @@ init_stack_head(void)
     bzero(head,sizeof(struct stack_head));
 
     head->head = Malloc(sizeof(struct stack_block));
-    head->tail = Malloc(sizeof(struct stack_block));
+    head->tail = head->head;
     bzero(head->head,sizeof(struct stack_block));
     bzero(head->tail,sizeof(struct stack_block));
     head->node_count = 0;

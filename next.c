@@ -62,7 +62,7 @@ set_symbol(struct token * const token, const char * const s,
 	return strlen(hash_key->name);
 }
 
-/*按照规则添加 * e.g.
+/*按照规则添加 mul e.g.
 * x(x+y)     =  x*(x+y)
 * xy         =  x*y
 * 3x         =  3*x
