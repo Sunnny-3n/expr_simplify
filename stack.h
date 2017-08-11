@@ -2,16 +2,16 @@
 #define STACK_H_
 
 #include <stdlib.h>
-#include "define.h"
 #include "err.h"
 
-#define BLOCK_SIZE 8
+#define MAX_NODE_COUNT 8
 
 
 struct stack_block
 {
-    struct token   block[BLOCK_SIZE],
-                 * end_node; 
+    void    * head,
+            * tail; 
+    size_t node_size;
 
     struct stack_block * next,
                        * prev;
@@ -20,7 +20,8 @@ struct stack_block
 struct stack_head
 {
     size_t node_count, // 堆栈目前容纳的 token 
-           block_count;
+           block_count,
+           node_size;
     struct stack_block * head,
                        * tail;
 };
@@ -29,12 +30,15 @@ bool
 is_empty_stack(const struct stack_head * const head);
 
 void
-push(struct stack_head * const head,struct token token);
+push(struct stack_head * const head,const void * const data);
 
-struct token 
+void *
 pop(struct stack_head * const head);
 
+void *
+get_top(const struct stack_head * const head);
+
 struct stack_head *
-init_stack_head(void);
+init_stack_head(size_t node_size);
 
 #endif

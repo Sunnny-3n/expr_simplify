@@ -3,25 +3,26 @@
 bool
 is_empty_stack(const struct stack_head * const head)
 {
-    return head->node_count;
+    return !(head->node_count);
 }
 
 static struct stack_block *
-init_stack_block(void)
+init_block(size_t node_size)
 {
     struct stack_block * new = Malloc(sizeof(struct stack_block));
-    bzero(new,sizeof(struct stack_block));
 
-    new->end_node = NULL;
+    new->node_size = node_size;
+    new->head     = Malloc(node_size * MAX_NODE_COUNT);
+    new->tail     = NULL;
     new->next     = NULL;
     new->prev     = NULL;
     return new;   
 }
 
 static void
-add_block(struct stack_head * const head)
+add_block(struct stack_head * const head,size_t node_size)
 {
-    struct stack_block * new = init_stack_block();
+    struct stack_block * new = init_block(node_size);
     head->tail->next = new;
     new->prev        = head->tail;
 
@@ -30,73 +31,82 @@ add_block(struct stack_head * const head)
 }
 
 static void
-add_node(struct stack_block * const block,struct token token)
+add_node(struct stack_block * const block,const void * const data)
 {
-    if(block->end_node == NULL)
-        block->end_node = block->block;
+    if(block->tail == NULL)
+        block->tail = block->head;
     else
-        block->end_node++;
+        block->tail += block->node_size;
 
-    *block->end_node = token;
+    block->tail = memmove(block->tail,data,block->node_size);
 }
 
 static void
 del_block(struct stack_head * const head)
 {
-        struct stack_block * tail = head->tail->prev;
-        tail->next = NULL;
-        free(head->tail);
+    struct stack_block * tail = head->tail;
+    if(tail->head == tail->tail)
+        head->node_count--;
+    else
+        head->node_count -= (tail->tail - tail->head) / tail->node_size;
 
-        head->tail = tail;
-        if(tail->end_node != NULL)
-            head->node_count -= tail->end_node - tail->block;
-        head->block_count--;
+    tail = head->tail->prev;
+    tail->next = NULL;
+    free(head->tail);
+
+    head->tail = tail;
+    head->block_count--;
 }
 
 static void
 del_node(struct stack_block * const block)
 {
-    bzero(block->end_node,sizeof(struct token));
-        block->end_node--;
+    bzero(block->tail,block->node_size);
+    block->tail -= block->node_size;
 }
 
 void
-push(struct stack_head * const head,struct token token)
+push(struct stack_head * const head,const void * const data)
 {
-    if(head->block_count * BLOCK_SIZE == head->node_count)
-        add_block(head);
+    if(head->block_count * MAX_NODE_COUNT == head->node_count)
+        add_block(head,head->node_size);
 
-    add_node(head->tail,token);
+    add_node(head->tail,data);
     head->node_count++;
 }
 
-struct token 
+void *
+get_top(const struct stack_head * const head)
+{
+    return head->tail->tail;
+}
+
+void *
 pop(struct stack_head * const head)
 {
-    struct token token = *head->tail->end_node;
+    void * data = Malloc(head->node_size);
+    data = memmove(data,get_top(head),head->node_size);
 
-    if(head->node_count == 0)
-        ERR(err_pop);
+    if(is_empty_stack(head))
+        return NULL;
 
-    if(head->block_count * BLOCK_SIZE == head->node_count - 1)
+    if(head->block_count * MAX_NODE_COUNT == head->node_count - 1)
         del_block(head);
     else
         del_node(head->tail);
 
     head->node_count--;
-    return token;
+    return data;
 }
 
 struct stack_head *
-init_stack_head(void)
+init_stack_head(size_t node_size)
 {
     struct stack_head * head = Malloc(sizeof(struct stack_head));
-    bzero(head,sizeof(struct stack_head));
 
-    head->head = Malloc(sizeof(struct stack_block));
+    head->head = init_block(node_size);
     head->tail = head->head;
-    bzero(head->head,sizeof(struct stack_block));
-    bzero(head->tail,sizeof(struct stack_block));
+    head->node_size = node_size;
     head->node_count = 0;
     head->block_count = 1;
 
